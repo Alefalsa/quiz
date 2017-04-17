@@ -1,0 +1,86 @@
+import random
+
+# The following are some strings to pass in to the play_game function.
+original_quotes = ["Always do your best. What you plant now, you will harvest later. Og Mandino","An investment in knowledge pays the best interest. Benjamin Franklin","We must develop and maintain the capacity to forgive. He who is devoid of the power to forgive is devoid of the power to love. There is some good in the worst of us and some evil in the best of us. When we discover this, we are less prone to hate our enemies. Martin Luther King, Jr"]
+movie_quotes = ["Toto, I've a feeling we're not in Kansas anymore. THE WIZARD OF OZ","I'm gonna make him an offer he can't refuse. THE GODFATHER","May the Force be with you. STAR WARS"]
+music_quotes = ["Every new beginning comes from some other beginning's end. SEMISONIC", "All you need is love, love. Love is all you need. THE BEATLES","We're just two lost souls swimming in a fish bowl. PINK FLOYD"]
+quotes = [movie_quotes,music_quotes,original_quotes]
+
+parts_of_speech = []
+
+# Checks if a word is in parts_of_speech.
+def word_in_pos(word, parts_of_speech):
+    for pos in parts_of_speech:
+        if pos == word:
+            return word
+    return None
+        
+# Plays a full game. A player is prompted to replace the blanks in famous quotes, 
+# which are randomly selected in parts_of_speech with the correct words.  
+def play_game(ml_string, parts_of_speech):
+    categories=['Movie','Music','Original','Random']
+    cat_input = ''
+    while cat_input not in categories:
+        cat_input = raw_input("Choose your category. Movie, Music, Original or Random.")
+    if cat_input == 'Movie':
+        category = 0
+    elif cat_input == 'Music':
+        category = 1
+    elif cat_input == 'Original':
+        category = 2
+    else:
+        category = random.randint(0,2)
+
+    levels=['Easy','Medium','Hard','Random']
+    level_input = ''
+    while level_input not in levels:
+        level_input = raw_input("Choose your level. Easy, Medium, Hard or Random.")
+    if level_input == 'Easy':
+        level = 4
+    elif level_input == 'Medium':
+        level = 6
+    elif level_input == 'Hard':
+        level = 8
+    else:
+        level = random.randint(4,8)
+
+    print 'Be wary of ponctuation, and Capital letters!!'
+
+    ml_string = ml_string[category][random.randint(0,2)]
+    replaced = []
+    replaced1 = []
+    ml_string = ml_string.split()
+    parts_of_speech = []
+    while len(parts_of_speech) < level:
+            p = ml_string[random.randint(0,len(ml_string)-1)]
+            if p not in parts_of_speech:
+                parts_of_speech.append(p)
+    for e in ml_string:
+        if e in parts_of_speech:
+            replaced1.append(len(e)*'_')
+        else:
+            replaced1.append(e)
+    replaced1 = " ".join(replaced1)
+
+    print replaced1
+        
+    blank = 0            
+    for word in ml_string:
+        replacement = word_in_pos(word, parts_of_speech)
+        t = 0
+        if replacement != None:
+            user_input = ''
+            while user_input != replacement:
+                user_input = raw_input("Type in: "+str(blank+1)+"____"+'('+str(t+1)+' try)')
+                if user_input == replacement:
+                    blank += 1
+                    word = word.replace(replacement, user_input,1)
+                    replaced.append(word)
+                    print " ".join(replaced)+replaced1[len(" ".join(replaced)):]
+                t += 1
+        else:
+            replaced.append(word)
+    replaced = " ".join(replaced)
+    return replaced
+
+print play_game(quotes, parts_of_speech)
